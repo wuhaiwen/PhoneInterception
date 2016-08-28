@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:key="reject_all"
+        android:title="全部拦截" />
+    <SwitchPreference
+        android:key="reject_black_list"
+        android:title="只拦截黑名单" />
+    <SwitchPreference
+        android:key="let_white_list"
+        android:title="只放行白名单" />
+</PreferenceScreen>

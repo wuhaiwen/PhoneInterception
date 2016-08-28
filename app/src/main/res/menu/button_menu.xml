@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_dial_back"
+        android:title="回拨" />
+    <item
+        android:id="@+id/action_add_white_list"
+        android:title="加入白名单" />
+    <item
+        android:id="@+id/action_add_black_list"
+        android:title="加入黑名单" />
+    <item
+        android:id="@+id/action_delete"
+        android:title="删除这条记录" />
+</menu>

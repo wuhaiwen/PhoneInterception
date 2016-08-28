@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="6dp">
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/linearLayout2">
+
+        <TextView
+            android:id="@+id/number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text=""
+            android:layout_gravity="center_vertical|left"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/retreat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/number"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_vertical|right"
+            android:layout_weight="1"
+            android:text="New Text" />
+    </LinearLayout>
+
+
+
+
+    <ImageButton
+        android:id="@+id/more_action_operation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_more_vert_black_24dp"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_toEndOf="@+id/linearLayout2" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:layout_marginLeft="1dp"
+        android:layout_alignBottom="@+id/more_action_operation"
+        android:layout_alignParentStart="true" />
+</RelativeLayout>
