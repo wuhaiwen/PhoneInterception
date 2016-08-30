@@ -30,4 +30,9 @@ public class Config {
     //插入白名单完成
     public static final String INSERT_LIST_SUCCESS ="insert_list_success";
     public static final String DELETE_LIST_SUCCESS ="delete_list_success";
+    //插入黑名单完成
+    public static final String INSERT_BLACK_LIST_SUCCESS ="insert_black_list_success";
+    public static final String DELETE_BLACK_LIST_SUCCESS ="delete_black_list_success";
+    //自定义短信内容
+    public static final String DEFINE_MSG_CONTENT ="define_msg_content";
 }

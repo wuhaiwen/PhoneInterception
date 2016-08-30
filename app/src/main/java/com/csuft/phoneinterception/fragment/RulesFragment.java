@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.csuft.phoneinterception.R;
+import com.csuft.phoneinterception.activity.BlackListActivity;
 import com.csuft.phoneinterception.activity.WhiteListActivity;
 import com.csuft.phoneinterception.adapter.SettingAdapter;
 import com.csuft.phoneinterception.util.Config;
@@ -50,6 +53,12 @@ public class RulesFragment extends Fragment {
     //拦截模式信息显示
     @Bind(R.id.show_info)
     TextView tv_show_info;
+    //
+    @Bind(R.id.tv_define_msg_content)
+    TextView tv_define_msg_content;
+
+    //短信内容
+    String define_msg_content_str;
 
     //设置拦击模式
     SharedPreferences mode_reject_all;
@@ -57,12 +66,14 @@ public class RulesFragment extends Fragment {
     SharedPreferences mode_let_white_list;
     SharedPreferences reject_mode_info;
     SharedPreferences mode_let_contacts;
+    SharedPreferences define_msg_content;
 
     SharedPreferences.Editor editor1;
     SharedPreferences.Editor editor2;
     SharedPreferences.Editor editor3;
     SharedPreferences.Editor editor4;
     SharedPreferences.Editor editor5;
+    SharedPreferences.Editor editor6;
 
     //定时器等设置布局
     @Bind(R.id.layout_more_setting)
@@ -89,9 +100,11 @@ public class RulesFragment extends Fragment {
         initListView2();
         SharedPreferences sharedPreferences = context.getSharedPreferences(Config.IS_OPEN, 0);
         boolean is_open = sharedPreferences.getBoolean(Config.IS_OPEN, false);
-        layout_more_setting.setVisibility(is_open? View.VISIBLE:View.INVISIBLE);
+        layout_more_setting.setVisibility(is_open ? View.VISIBLE : View.INVISIBLE);
         aSwitch.setChecked(is_open);
         msg = reject_mode_info.getString(Config.REJECT_MODE_INFO, "默认全部拦截");
+        define_msg_content_str = define_msg_content.getString(Config.DEFINE_MSG_CONTENT, "你好，我现在不方便接电话，等下打给你");
+        tv_define_msg_content.setText("(短信内容："+define_msg_content_str+")");
         tv_show_info.setText(msg);
         return v;
     }
@@ -102,15 +115,17 @@ public class RulesFragment extends Fragment {
         mode_let_white_list = context.getSharedPreferences(Config.LET_WHITE_LIST, Context.MODE_PRIVATE);
         mode_let_contacts = context.getSharedPreferences(Config.LET_CONTACTS_LIST, Context.MODE_PRIVATE);
         reject_mode_info = context.getSharedPreferences(Config.REJECT_MODE_INFO, Context.MODE_PRIVATE);
+        define_msg_content = context.getSharedPreferences(Config.DEFINE_MSG_CONTENT, Context.MODE_PRIVATE);
         editor1 = mode_reject_all.edit();
         editor2 = mode_reject_black_list.edit();
         editor3 = mode_let_white_list.edit();
         editor4 = reject_mode_info.edit();
         editor5 = mode_let_contacts.edit();
+        editor6 = define_msg_content.edit();
     }
 
     private void initListView2() {
-        final String[] data = {"白名单", "黑名单"};
+        final String[] data = {"白名单", "黑名单", "短信设置"};
         settingAdapter = new SettingAdapter(context, data);
         listView_list_add.setAdapter(settingAdapter);
         listView_list_add.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -119,8 +134,29 @@ public class RulesFragment extends Fragment {
                 if (data[position].equals("白名单")) {
                     Intent intent = new Intent(context, WhiteListActivity.class);
                     context.startActivity(intent);
+                } else if (data[position].equals("黑名单")) {
+                    Intent intent = new Intent(context, BlackListActivity.class);
+                    context.startActivity(intent);
                 } else {
-                    ToastShow.showToast(context, "黑名单");
+                    LinearLayout linearLayout = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.define_msg_content_mode, null);
+                    final EditText message_content = (EditText) linearLayout.findViewById(R.id.editText_define_msg_content);
+                    new AlertDialog.Builder(context)
+                            .setView(linearLayout)
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    String content = message_content.getText().toString().replace(" ", "");
+                                    if (content.length() > 0) {
+                                        editor6.putString(Config.DEFINE_MSG_CONTENT, content);
+                                        editor6.commit();
+                                        tv_define_msg_content.setText("(短信内容："+content+")");
+                                        ToastShow.showToast(context, "修改成功");
+                                    }
+                                }
+                            })
+                            .setNegativeButton("取消", null)
+                            .create()
+                            .show();
                 }
             }
         });
@@ -164,12 +200,12 @@ public class RulesFragment extends Fragment {
                                     if (rb_let_white.isChecked()) {
                                         editor3.putBoolean(Config.LET_WHITE_LIST, true);
                                         msg = "(只放行白名单)";
-                                    }  else
+                                    } else
                                         editor3.putBoolean(Config.LET_WHITE_LIST, false);
                                     if (rb_let_contacts.isChecked()) {
                                         editor5.putBoolean(Config.LET_CONTACTS_LIST, true);
                                         msg = "(放行联系人)";
-                                    }else
+                                    } else
                                         editor5.putBoolean(Config.LET_CONTACTS_LIST, false);
 
                                     //在设置这一栏显示拦截模式信息

@@ -15,7 +15,7 @@
         app:tabSelectedTextColor="@color/white"
         android:layout_alignParentStart="true"
         app:tabGravity="fill"
-        app:tabTextColor="@color/black" />
+        app:tabTextColor="@color/gray" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"

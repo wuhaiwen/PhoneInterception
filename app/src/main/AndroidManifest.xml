@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.SEND_SMS"/>
 
     <!-- <uses-permission android:name="android.permission.MODIFY_PHONE_STATE"/> -->
     <!-- <uses-permission android:name="android.permission.INSTALL_PACKAGES"/> -->
@@ -47,8 +48,11 @@
         <activity
             android:name=".activity.AddWhiteActivity"
             android:parentActivityName=".activity.MainActivity"
-            android:theme="@style/MyTheme2"></activity>
-        <activity android:name=".activity.WhiteListActivity"></activity>
+            android:theme="@style/MyTheme2" />
+        <activity android:name=".activity.WhiteListActivity"
+            android:theme="@style/MyTheme"/>
+        <activity android:name=".activity.BlackListActivity" />
+        <activity android:name=".activity.AddBlackActivity"></activity>
     </application>
 
 </manifest>

@@ -133,9 +133,6 @@ public class WhiteListActivity extends AppCompatActivity {
                 intent.putExtra("db_data",db_data);
                 startActivity(intent);
                 break;
-            case R.id.action_define_own:
-
-                break;
         }
         return true;
     }

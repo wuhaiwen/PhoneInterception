@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_add_province"
+        android:title="添加省份黑名单"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_define_black_own"
+        android:title="自定义黑名单"
+        app:showAsAction="always" />
+</menu>

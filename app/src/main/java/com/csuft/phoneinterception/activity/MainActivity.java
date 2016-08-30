@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.csuft.phoneinterception.R;
 import com.csuft.phoneinterception.fragment.AboutFragment;
-import com.csuft.phoneinterception.fragment.MessageFragment;
 import com.csuft.phoneinterception.fragment.PhoneFragment;
 import com.csuft.phoneinterception.fragment.RulesFragment;
 import com.csuft.phoneinterception.util.ToastShow;
@@ -65,13 +64,12 @@ public class MainActivity extends AppCompatActivity {
     class TabAdapter extends FragmentPagerAdapter{
 
 
-        String[] title = {"拦截记录","拦截规则","短信发送","关于"};
+        String[] title = {"拦截记录","拦截规则","关于"};
 
         public TabAdapter(FragmentManager fm) {
             super(fm);
             fragmentList.add(new PhoneFragment());
             fragmentList.add(new RulesFragment());
-            fragmentList.add(new MessageFragment());
             fragmentList.add(new AboutFragment());
         }
 

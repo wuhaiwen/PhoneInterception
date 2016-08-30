@@ -5,8 +5,4 @@
         android:id="@+id/action_from_contacts"
         android:title="从联系人中选择"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/action_define_own"
-        android:title="自定义号码"
-        app:showAsAction="always" />
 </menu>

@@ -8,17 +8,19 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.telecom.TelecomManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.csuft.phoneinterception.R;
 import com.csuft.phoneinterception.adapter.RecordAdapter;
-import com.csuft.phoneinterception.broadcast.PhoneReceiver;
 import com.csuft.phoneinterception.db.DateBaseHelper;
 import com.csuft.phoneinterception.mode.PhoneRecord;
 import com.csuft.phoneinterception.util.Config;
@@ -39,13 +41,16 @@ public class PhoneFragment extends Fragment {
     //活动上下文
     Context context;
 
-    TelecomManager telecomManager;
-
-    PhoneReceiver phoneReceiver;
     SQLiteDatabase db;
 
     @Bind(R.id.listView)
     ListView listView;
+
+    @Bind(R.id.button_delete_all)
+    Button btn_delete_all;
+
+    @Bind(R.id.textView_nothing)
+    TextView noting;
 
     List<PhoneRecord> data;
 
@@ -67,7 +72,7 @@ public class PhoneFragment extends Fragment {
         IntentFilter filter = new IntentFilter(Config.UPDATE);
         //注册广播
         context.registerReceiver(receiver, filter);
-        initListView();
+        btn_delete_all.setOnClickListener(new ButtonDeleteListener());
         return view;
     }
 
@@ -80,39 +85,72 @@ public class PhoneFragment extends Fragment {
             String retreat = cursor.getString(1);
             String date = cursor.getString(2);
             int id = cursor.getInt(3);
-            PhoneRecord record = new PhoneRecord(date,String.valueOf(id), number, retreat);
+            PhoneRecord record = new PhoneRecord(date, String.valueOf(id), number, retreat);
             data.add(record);
         }
         cursor.close();
-        if (db != null) {
-            db.close();
+        if (!data.isEmpty()) {
+            btn_delete_all.setVisibility(View.VISIBLE);
+            noting.setVisibility(View.INVISIBLE);
+        } else {
+            btn_delete_all.setVisibility(View.INVISIBLE);
+            noting.setVisibility(View.VISIBLE);
         }
-//        int size = data.size();
-//        List<PhoneRecord> data2 = new ArrayList<>();
-//        for(int i = 0;i<data.size();i++){
-//            data2.add(data.get(size-1));
-//            size--;
-//        }
         recordAdapter = new RecordAdapter(data, context);
         listView.setAdapter(recordAdapter);
+
+    }
+
+    class ButtonDeleteListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            Snackbar.make(v, "确定全部删除?", Snackbar.LENGTH_LONG)
+                    .setAction(
+                            "确定",
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    try {
+                                        String sql = "delete from record where id>0";
+                                        db.execSQL(sql);
+                                        initListView();
+                                        Toast.makeText(context, "删除成功", Toast.LENGTH_SHORT).show();
+                                    } catch (Exception e) {
+                                        Toast.makeText(context, "删除失败", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+                    )
+                    .show();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initListView();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop");
+        if(db!=null){
+            db.close();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         context.unregisterReceiver(receiver);
-    }
-
-    public static class SettingFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            //加载xml资源文件
-
-            //addPreferencesFromResource(R.xml.settings);
-        }
-
     }
 
     BroadcastReceiver receiver = new BroadcastReceiver() {

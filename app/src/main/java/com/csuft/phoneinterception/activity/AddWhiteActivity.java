@@ -47,7 +47,6 @@ public class AddWhiteActivity extends AppCompatActivity {
         initToolbar();
 //        initListView();
         Intent intent = getIntent();
-        ToastShow.showToast(this, "白名单的联系人将不会出现");
         db_data = (ArrayList<Contacts>) intent.getSerializableExtra("db_data");
         contacts_intent = new Intent(this, ContactsService.class);
         startService(contacts_intent);

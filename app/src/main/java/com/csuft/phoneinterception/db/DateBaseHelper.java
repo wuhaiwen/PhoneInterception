@@ -25,11 +25,14 @@ public class DateBaseHelper extends SQLiteOpenHelper {
                 + "number text,"
                 + "retreat text,"
                 + "date text)");
-        Log.d("datebases","表一已经执行");
-        db.execSQL( "create table  IF NOT EXISTS white_list(id   primary key,"
+        Log.d("databases", "表一已经执行");
+        db.execSQL("create table  IF NOT EXISTS white_list(id integer primary key,"
                 + "number text,"
                 + "name text)");
-        Log.d("datebases","表二已经执行");
+        Log.d("databases", "表二已经执行");
+        db.execSQL("create table  IF NOT EXISTS black_list(id integer primary key AUTOINCREMENT,"
+                + "key text)");
+        Log.d("databases", "表三已经执行");
 
     }
 
@@ -38,9 +41,9 @@ public class DateBaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void DoExecSQL(String sql,SQLiteDatabase db){
+    public void DoExecSQL(String sql, SQLiteDatabase db) {
         db.execSQL(sql);
-        if(db!=null)
+        if (db != null)
             db.close();
     }
 }

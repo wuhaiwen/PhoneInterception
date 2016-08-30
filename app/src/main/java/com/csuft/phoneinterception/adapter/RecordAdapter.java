@@ -1,17 +1,26 @@
 package com.csuft.phoneinterception.adapter;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.provider.ContactsContract;
+import android.support.v7.app.AlertDialog;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -38,7 +47,7 @@ public class RecordAdapter extends BaseAdapter {
 
     public RecordAdapter(List<PhoneRecord> data, Context context) {
         this.data = data;
-        this.context =  context;
+        this.context = context;
         inflater = LayoutInflater.from(context);
     }
 
@@ -100,6 +109,7 @@ public class RecordAdapter extends BaseAdapter {
         }
 
     }
+
     class ButtonListener implements ImageButton.OnClickListener {
         int position;
 
@@ -120,36 +130,101 @@ public class RecordAdapter extends BaseAdapter {
                             //获得电话号码然后用意图启动拨号界面，不会直接拨出去
                             Intent intent = new Intent();
                             intent.setAction(Intent.ACTION_DIAL);
-                            intent.setData(Uri.parse("tel:"+data.get(position).getNumber()));
+                            intent.setData(Uri.parse("tel:" + data.get(position).getNumber()));
                             context.startActivity(intent);
                             break;
-                        case R.id.action_add_white_list:
-                            ToastShow.showToast(context, "加入白名单" + position);
-                            break;
                         case R.id.action_add_black_list:
-                            ToastShow.showToast(context, "加入黑名单" + position);
+                            String num = data.get(position).getNumber();
+                            boolean is_exist = false;
+                            String sql2 = "insert into black_list(key) values(" + "'" + num + "'" + ")";
+                            String sql1 = "select key from black_list";
+                            Cursor cursor = dateBaseHelper.rawQuery(sql1, null);
+                            while (cursor.moveToNext()) {
+                                String key = cursor.getString(0);
+                                if (key.replace(" ", "").equals(num)) {
+                                    ToastShow.showToast(context, "该名单已存在");
+                                    is_exist = true;
+                                    break;
+                                }
+                            }
+                            if (!is_exist) {
+                                try {
+                                    dateBaseHelper.execSQL(sql2);
+                                    ToastShow.showToast(context, "添加成功");
+                                } catch (Exception e) {
+                                    ToastShow.showToast(context, "添加失败");
+                                    e.printStackTrace();
+                                }
+                            }
                             break;
                         case R.id.action_delete:
                             try {
-                                String sql = "delete from record where id="+Integer.parseInt(data.get(position).getId())+";";
-                                Log.d("gaga",sql);
+                                String sql = "delete from record where id=" + Integer.parseInt(data.get(position).getId()) + ";";
+                                Log.d("gaga", sql);
                                 dateBaseHelper.execSQL(sql);
                                 //删除成功后发送一个广播给fragment用来更新界面
                                 Intent intent1 = new Intent(Config.UPDATE);
+                                ToastShow.showToast(context,"已删除");
                                 context.sendBroadcast(intent1);
-                                if(dateBaseHelper!=null){
+                                if (dateBaseHelper != null) {
                                     dateBaseHelper.close();
                                 }
-                            }catch (SQLException e){
+                            } catch (SQLException e) {
                                 e.printStackTrace();
                                 dateBaseHelper.close();
                             }
                             break;
+                        case R.id.action_add_contacts_list:
+                            Intent intent2 = new Intent();
+                            intent2.setAction(Intent.ACTION_INSERT_OR_EDIT);
+                            intent2.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+                            intent2.putExtra(ContactsContract.Intents.Insert.PHONE,data.get(position).getNumber());
+                            context.startActivity(intent2);
+                            break;
+                        case R.id.action_send_message:
+                            SharedPreferences sharedPreferences = context.getSharedPreferences(Config.DEFINE_MSG_CONTENT, Context.MODE_PRIVATE);
+                            String msg   = sharedPreferences.getString(Config.DEFINE_MSG_CONTENT, "你好，我现在不方便接电话，等下打给你");
+                            LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.send_message_mode,null);
+                            final EditText message_content = (EditText) linearLayout.findViewById(R.id.et_message_content);
+                            message_content.setText(msg);
+                            TextView accept_number = (TextView) linearLayout.findViewById(R.id.accept_number);
+                            accept_number.setText("对方:"+data.get(position).getNumber());
+                            new AlertDialog.Builder(context)
+                                    .setView(linearLayout)
+                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            String content = message_content.getText().toString();
+                                            SmsManager manager = SmsManager.getDefault();
+                                            PendingIntent pendingIntent = PendingIntent.getActivities(
+                                                    context,
+                                                    0,
+                                                    new Intent[]{new Intent()},
+                                                    0
+                                            );
+                                            manager.sendTextMessage(
+                                                    data.get(position).getNumber(),
+                                                    null,
+                                                    content,
+                                                    pendingIntent,
+                                                    null
+                                            );
+                                            ToastShow.showToast(context,"发送成功");
+                                        }
+                                    })
+                                    .setNegativeButton("取消",null)
+                                    .create()
+                                    .show();
+                            break;
+
                     }
                     return true;
                 }
             });
             menu.show();
+//            if(dateBaseHelper!=null){
+//                dateBaseHelper.close();
+//            }
 //            ToastShow.showToast(context, "点击了gaga");
         }
     }
