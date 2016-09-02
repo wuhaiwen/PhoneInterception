@@ -3,130 +3,103 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
-    tools:context="com.csuft.phoneinterception.fragment.RulesFragment">
+    tools:context=".activity.fragment.RulesFragment">
+
+    <!--<ScrollView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
 
     <LinearLayout
-        android:id="@+id/linearLayout5"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="6dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="6dp">
+
+            <TextView
+                android:id="@+id/tv_is_open_reject"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|left"
+                android:layout_weight="2"
+                android:text="是否拦截"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/show_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="" />
+
+            <Switch
+                android:id="@+id/switch_open"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2" />
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/listView_list_add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
 
         <TextView
-            android:id="@+id/tv_is_open_reject"
-            android:layout_width="0dp"
+            android:id="@+id/tv_define_msg_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|left"
-            android:layout_weight="2"
-            android:text="是否拦截"
-            android:textSize="20sp" />
+            android:layout_marginLeft="5dp"
+            android:text="gaga" />
 
-        <TextView
-            android:id="@+id/show_info"
-            android:layout_width="wrap_content"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/tv_define_msg_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/light_gray" />
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout_no_disturb"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="" />
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:padding="6dp">
 
-        <Switch
-            android:id="@+id/switch_open"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="2" />
+            <include
+                layout="@layout/more_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
+            <TextView
+                android:id="@+id/tv_show_duration_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|left"
+                android:layout_marginLeft="5dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/tv_show_duration_info"
+                android:layout_marginTop="20dp"
+                android:background="@color/light_gray" />
+
+        </LinearLayout>
     </LinearLayout>
-    <!--<View-->
-    <!--android:id="@+id/line"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="0.5dp"-->
-    <!--android:layout_below="@+id/linearLayout5"-->
-    <!--android:background="@android:color/darker_gray" />-->
-    <!--<LinearLayout-->
-    <!--android:id="@+id/linearLayout2"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:padding="2dp"-->
-    <!--android:layout_below="@+id/line"-->
-    <!--android:layout_alignParentEnd="true">-->
-    <!--<TextView-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center_vertical|left"-->
-    <!--android:layout_weight="3"-->
-    <!--android:text="白名单"-->
-    <!--android:textSize="15sp" />-->
 
-    <!--<ImageButton-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:id="@+id/add_white_list"-->
-    <!--android:layout_weight="1"-->
-    <!--android:src="@android:drawable/ic_input_add"-->
-    <!--style="@style/Base.Widget.AppCompat.Button.Borderless" />-->
-
-    <!--</LinearLayout>-->
-    <!--<View-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="0.5dp"-->
-    <!--android:layout_below="@+id/linearLayout2"-->
-    <!--android:background="@android:color/darker_gray"-->
-    <!--android:id="@+id/view" />-->
-    <!--<LinearLayout-->
-    <!--android:id="@+id/linearLayout3"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:padding="2dp"-->
-    <!--android:layout_below="@+id/view"-->
-    <!--android:layout_alignParentStart="true">-->
-    <!--<TextView-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center_vertical|left"-->
-    <!--android:layout_weight="3"-->
-    <!--android:text="黑名单"-->
-    <!--android:textSize="15sp" />-->
-
-    <!--<ImageButton-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:id="@+id/add_black_list"-->
-    <!--android:layout_weight="1"-->
-    <!--android:src="@android:drawable/ic_input_add"-->
-    <!--style="@style/Base.Widget.AppCompat.Button.Borderless" />-->
-
-    <!--</LinearLayout>-->
-    <!--<View-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="0.5dp"-->
-    <!--android:layout_below="@+id/linearLayout3"-->
-    <!--android:background="@android:color/darker_gray"-->
-    <!--android:id="@+id/view2" />-->
-    <ListView
-        android:id="@+id/listView_list_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/linearLayout5"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
-    <TextView
-        android:layout_below="@+id/listView_list_add"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="gaga"
-        android:layout_marginLeft="5dp"
-        android:id="@+id/tv_define_msg_content"
-        />
-    <include
-        layout="@layout/more_setting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/listView_list_add"
-        android:layout_marginTop="50dp" />
+    <!--</ScrollView>-->
 
 </RelativeLayout>

@@ -38,7 +38,6 @@ public class BlackListActivity extends AppCompatActivity {
     Toolbar toolbar;
     @Bind(R.id.tv_noting)
     TextView tv_noting;
-
     @Bind(R.id.listView_black_list)
     ListView Lv_black_list;
 
@@ -47,12 +46,14 @@ public class BlackListActivity extends AppCompatActivity {
     ArrayList<String> data;
 
     BlackListAdapter blackListAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_black_list);
         ButterKnife.bind(this);
-        db =  new DateBaseHelper(this, "record.db", null, 1).getWritableDatabase();;
+        db = new DateBaseHelper(this, "record.db", null, 1).getWritableDatabase();
+        ;
         initToolbar();
     }
 
@@ -71,7 +72,7 @@ public class BlackListActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(db!=null){
+        if (db != null) {
             db.close();
         }
         unregisterReceiver(receiver);
@@ -83,7 +84,7 @@ public class BlackListActivity extends AppCompatActivity {
         if (!data.isEmpty()) {
             tv_noting.setVisibility(View.INVISIBLE);
 //            Log.d("size", String.valueOf(db_data.size()));
-        }else {
+        } else {
             tv_noting.setVisibility(View.VISIBLE);
         }
     }
@@ -99,6 +100,7 @@ public class BlackListActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = new MenuInflater(this);
@@ -112,23 +114,23 @@ public class BlackListActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_add_province:
 //                finish();
-                Intent intent = new Intent(this,AddBlackActivity.class);
-                intent.putExtra("black_data",data);
+                Intent intent = new Intent(this, AddBlackActivity.class);
+                intent.putExtra("black_data", data);
                 startActivity(intent);
                 break;
             case R.id.action_define_black_own:
-                LinearLayout linearLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.define_black_own,null);
+                LinearLayout linearLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.define_black_own, null);
                 final EditText black_num = (EditText) linearLayout.findViewById(R.id.editText_black_num);
-               new AlertDialog.Builder(this)
+                new AlertDialog.Builder(this)
                         .setView(linearLayout)
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String num = black_num.getText().toString().replace(" ","");
-                                if(num.length()==3){
-                                    num = num+" 开头的号码";
+                                String num = black_num.getText().toString().replace(" ", "");
+                                if (num.length() == 3) {
+                                    num = num + " 开头的号码";
                                 }
-                                if(!TextUtils.isEmpty(num)) {
+                                if (!TextUtils.isEmpty(num)) {
                                     boolean is_exist = false;
                                     String sql = "insert into black_list(key) values(" + "'" + num + "'" + ")";
                                     for (String str : data
@@ -153,7 +155,7 @@ public class BlackListActivity extends AppCompatActivity {
                                 }
                             }
                         })
-                        .setNegativeButton("取消",null)
+                        .setNegativeButton("取消", null)
                         .create()
                         .show();
                 break;
@@ -164,23 +166,23 @@ public class BlackListActivity extends AppCompatActivity {
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            int position = intent.getIntExtra("position3",-1);
+            int position = intent.getIntExtra("position3", -1);
             data.remove(position);
             initListView();
         }
     };
 
-    public void initView(){
+    public void initView() {
         data = new ArrayList<>();
         String sql = "select key from black_list";
-        Cursor cursor = db.rawQuery(sql,null);
-        while(cursor.moveToNext()){
+        Cursor cursor = db.rawQuery(sql, null);
+        while (cursor.moveToNext()) {
             String key = cursor.getString(0);
             data.add(key);
         }
         cursor.close();
         IntentFilter filter = new IntentFilter(Config.DELETE_BLACK_LIST_SUCCESS);
-        registerReceiver(receiver,filter);
+        registerReceiver(receiver, filter);
         initListView();
     }
 }

@@ -22,12 +22,50 @@ public class DbManager {
 
     }
 
-    public SQLiteDatabase getDatabase() {
-//        Log.d("path", "昨夜风凋碧树");
-        return openDatabase();
+    public SQLiteDatabase getDatabase1() {
+        return openDatabase1();
     }
 
-    private SQLiteDatabase openDatabase() {
+    public SQLiteDatabase getDatabase2() {
+        return openDatabase2();
+    }
+
+    private SQLiteDatabase openDatabase1() {
+//        String path = getFilesDir();
+        String dirPath = "/data/data/com.csuft.phoneinterception/databases";
+        File dir = new File(dirPath);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        //数据库文件
+        File file = new File(dir, "address.db");
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+                //加载需要导入的数据库
+                InputStream is = this.context.getApplicationContext().getResources().openRawResource(R.raw.address);
+//            Log.d("size",is.available()+"");
+                FileOutputStream fos = new FileOutputStream(file);
+                byte[] buffer = new byte[is.available()];
+                is.read(buffer);
+                fos.write(buffer);
+                is.close();
+                fos.close();
+            } else {
+                return SQLiteDatabase.openOrCreateDatabase(file,
+                        null);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return SQLiteDatabase.openOrCreateDatabase(file,
+                null);
+    }
+
+    private SQLiteDatabase openDatabase2() {
 //        String path = getFilesDir();
         String dirPath = "/data/data/com.csuft.phoneinterception/databases";
         File dir = new File(dirPath);

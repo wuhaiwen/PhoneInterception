@@ -134,7 +134,9 @@ public class RecordAdapter extends BaseAdapter {
                             context.startActivity(intent);
                             break;
                         case R.id.action_add_black_list:
-                            String num = data.get(position).getNumber();
+                            String num_info = data.get(position).getNumber();
+                            String num = num_info.substring(0,num_info.indexOf("("));
+//                            ToastShow.showToast(context, num);
                             boolean is_exist = false;
                             String sql2 = "insert into black_list(key) values(" + "'" + num + "'" + ")";
                             String sql1 = "select key from black_list";
@@ -164,7 +166,7 @@ public class RecordAdapter extends BaseAdapter {
                                 dateBaseHelper.execSQL(sql);
                                 //删除成功后发送一个广播给fragment用来更新界面
                                 Intent intent1 = new Intent(Config.UPDATE);
-                                ToastShow.showToast(context,"已删除");
+                                ToastShow.showToast(context, "已删除");
                                 context.sendBroadcast(intent1);
                                 if (dateBaseHelper != null) {
                                     dateBaseHelper.close();
@@ -178,17 +180,20 @@ public class RecordAdapter extends BaseAdapter {
                             Intent intent2 = new Intent();
                             intent2.setAction(Intent.ACTION_INSERT_OR_EDIT);
                             intent2.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
-                            intent2.putExtra(ContactsContract.Intents.Insert.PHONE,data.get(position).getNumber());
+                            intent2.putExtra(ContactsContract.Intents.Insert.PHONE, data.get(position).getNumber());
                             context.startActivity(intent2);
                             break;
                         case R.id.action_send_message:
                             SharedPreferences sharedPreferences = context.getSharedPreferences(Config.DEFINE_MSG_CONTENT, Context.MODE_PRIVATE);
-                            String msg   = sharedPreferences.getString(Config.DEFINE_MSG_CONTENT, "你好，我现在不方便接电话，等下打给你");
-                            LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.send_message_mode,null);
+                            String msg = sharedPreferences.getString(Config.DEFINE_MSG_CONTENT, "你好，我现在不方便接电话，等下打给你");
+                            LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.send_message_mode, null);
                             final EditText message_content = (EditText) linearLayout.findViewById(R.id.et_message_content);
                             message_content.setText(msg);
                             TextView accept_number = (TextView) linearLayout.findViewById(R.id.accept_number);
-                            accept_number.setText("对方:"+data.get(position).getNumber());
+                            final String number = data.get(position).getNumber()
+                                    .substring(0,data.get(position).getNumber().indexOf("("));
+                            accept_number.setText("对方:" + number);
+                            Log.d("gaga",number);
                             new AlertDialog.Builder(context)
                                     .setView(linearLayout)
                                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -196,23 +201,25 @@ public class RecordAdapter extends BaseAdapter {
                                         public void onClick(DialogInterface dialog, int which) {
                                             String content = message_content.getText().toString();
                                             SmsManager manager = SmsManager.getDefault();
-                                            PendingIntent pendingIntent = PendingIntent.getActivities(
+                                            PendingIntent pendingIntent = PendingIntent.getActivity(
                                                     context,
                                                     0,
-                                                    new Intent[]{new Intent()},
+                                                    new Intent(),
                                                     0
                                             );
-                                            manager.sendTextMessage(
-                                                    data.get(position).getNumber(),
-                                                    null,
-                                                    content,
-                                                    pendingIntent,
-                                                    null
-                                            );
-                                            ToastShow.showToast(context,"发送成功");
+                                            if (content.length() > 0){
+                                                manager.sendTextMessage(
+                                                       number,
+                                                        null,
+                                                        content,
+                                                        pendingIntent,
+                                                        null
+                                                );
+                                                ToastShow.showToast(context, "发送成功");
+                                            }
                                         }
                                     })
-                                    .setNegativeButton("取消",null)
+                                    .setNegativeButton("取消", null)
                                     .create()
                                     .show();
                             break;

@@ -9,9 +9,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.csuft.phoneinterception.R;
-import com.csuft.phoneinterception.fragment.AboutFragment;
-import com.csuft.phoneinterception.fragment.PhoneFragment;
-import com.csuft.phoneinterception.fragment.RulesFragment;
+import com.csuft.phoneinterception.activity.fragment.AboutFragment;
+import com.csuft.phoneinterception.activity.fragment.PhoneFragment;
+import com.csuft.phoneinterception.activity.fragment.RulesFragment;
 import com.csuft.phoneinterception.util.ToastShow;
 
 import java.util.ArrayList;
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(System.currentTimeMillis()-exitTime>2000){
-            ToastShow.showToast(this,"程序退出后不再拦截，再按一次退出");
+            ToastShow.showToast(this,"再按一次退出");
             exitTime = System.currentTimeMillis();
             return;
         }else {

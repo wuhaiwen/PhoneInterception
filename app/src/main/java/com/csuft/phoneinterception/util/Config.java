@@ -35,4 +35,7 @@ public class Config {
     public static final String DELETE_BLACK_LIST_SUCCESS ="delete_black_list_success";
     //自定义短信内容
     public static final String DEFINE_MSG_CONTENT ="define_msg_content";
+    //免打扰
+    public static final String NO_DISTURB ="no_disturb";
+    public static final String DISTURB_INFO ="distrub_info";
 }

@@ -20,9 +20,10 @@
             android:layout_weight="2" />
 
         <ImageButton
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:src="@android:drawable/ic_input_add"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/add"
             android:id="@+id/ibt_add_list"
             style="@style/Base.Widget.AppCompat.Button.Borderless" />
 

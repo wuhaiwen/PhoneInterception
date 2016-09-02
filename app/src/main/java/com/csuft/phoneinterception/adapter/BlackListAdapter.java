@@ -69,7 +69,7 @@ public class BlackListAdapter extends BaseAdapter {
         listener.setPosition(position);
         viewHolder.ibt_add.setOnClickListener(listener);
         viewHolder.black_name.setText(data.get(position));
-        viewHolder.ibt_add.setImageResource(R.drawable.ic_close_black_24dp);
+        viewHolder.ibt_add.setImageResource(R.drawable.delete);
         return convertView;
     }
 

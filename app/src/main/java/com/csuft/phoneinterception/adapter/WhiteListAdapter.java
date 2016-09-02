@@ -2,7 +2,6 @@ package com.csuft.phoneinterception.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,7 +69,7 @@ public class WhiteListAdapter extends BaseAdapter {
         ImageButtonListener listener = new ImageButtonListener();
         listener.setPosition(position);
         viewHolder.ibt_add.setOnClickListener(listener);
-        viewHolder.ibt_add.setImageResource(R.drawable.ic_close_black_24dp);
+        viewHolder.ibt_add.setImageResource(R.drawable.delete);
         return convertView;
     }
 
@@ -103,7 +102,6 @@ public class WhiteListAdapter extends BaseAdapter {
             try {
             String sql = "delete from white_list where id=" + contacts.getId();
             db.execSQL(sql);
-            Cursor cursor = db.rawQuery("select id from white_list", null);
             ToastShow.showToast(context, "删除成功");
             Intent intent = new Intent(Config.DELETE_LIST_SUCCESS);
             intent.putExtra("position1", position);

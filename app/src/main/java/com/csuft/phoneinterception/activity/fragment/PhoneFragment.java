@@ -1,4 +1,4 @@
-package com.csuft.phoneinterception.fragment;
+package com.csuft.phoneinterception.activity.fragment;
 
 
 import android.content.BroadcastReceiver;

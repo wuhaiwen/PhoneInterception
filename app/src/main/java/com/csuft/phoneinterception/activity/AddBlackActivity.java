@@ -49,7 +49,7 @@ public class AddBlackActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_black);
         ButterKnife.bind(this);
         initToolbar();
-        db = manager.getDatabase();
+        db = manager.getDatabase2();
         black_data = (ArrayList<String>) getIntent().getSerializableExtra("black_data");
         new LoadProvinces().start();
         progressBar.setVisibility(View.INVISIBLE);

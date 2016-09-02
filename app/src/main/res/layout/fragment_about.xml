@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.csuft.phoneinterception.fragment.AboutFragment">
+    tools:context=".activity.fragment.AboutFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <ScrollView
@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:singleLine="false"
-                android:text="  1.安卓6.0版本的如果出现闪退的情况，可能是没有赋予相关权限请到设置->应用管理->电话拦截灵->权限 赋予该应用相对应的权限"
+                android:text="  1.安卓6.0版本的如果出现无法运行的情况，可能是没有赋予相关权限请到设置->应用管理->电话拦截灵->权限 赋予该应用相对应的权限（不同厂商的手机可能存在差异）"
                 android:textSize="@dimen/text_padding" />
 
             <TextView
@@ -37,6 +37,14 @@
                 android:singleLine="false"
                 android:text="  2.由于使用的是系统控件，安卓系统版本号不同对应的界面可能会有有所差异(不会影响使用)"
                 android:textSize="@dimen/text_padding" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="false"
+                android:text="  3.请让应用在后台运行"
+                android:textSize="@dimen/text_padding" />
+
 
             <TextView
                 android:layout_width="match_parent"
@@ -50,14 +58,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:singleLine="false"
-                android:text="  1.本人完全是出于兴趣开发该应用，如果使用过程中出现问题，请到应用市场评价中指出，如果是普遍性问题，我会在下一个版本中解决。总之，不管是好是坏可以到应用商城给个评价，也是我学习的一个方向"
+                android:text="  1.本人完全是出于兴趣开发该应用，如果使用过程中出现问题，请到应用市场评价中指出"
                 android:textSize="@dimen/text_padding" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="false"
-                android:text="  2.保证绝对不会有广告，绝不含恶意代码窃取用户信息恶意吸费消耗流量，应用所需的权限使用者可以根据功能一一对比"
+                android:text="  2.没有广告，不含恶意代码，应用所需的权限使用者可以根据功能一一对比"
                 android:textSize="@dimen/text_padding" />
 
             <TextView
@@ -72,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:singleLine="false"
-                android:text="  本人在校学生，安卓新手，喜欢开源，主要为了交流学习，增加经验，该应用源码感兴趣的可以到下面这个网址下载："
+                android:text="  本人在校学生，安卓新手，该应用源码感兴趣的可以到github上下载："
                 android:textSize="@dimen/text_padding" />
 
             <TextView
@@ -95,20 +103,6 @@
                 android:text="xfdbtree@163.com"
                 android:textSize="@dimen/text_padding" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="   github主页："
-                android:textSize="@dimen/text_padding" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:text="https://github.com/wuhaiwen"
-                android:textSize="@dimen/text_padding" />
         </LinearLayout>
     </ScrollView>
-
-
 </LinearLayout>
