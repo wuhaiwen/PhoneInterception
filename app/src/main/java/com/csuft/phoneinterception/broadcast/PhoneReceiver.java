@@ -302,7 +302,6 @@ public class PhoneReceiver extends BroadcastReceiver {
             //如果不是来自联系人，则挂断
             if (!is_contacts)
                 doReceivePhone(context, intent);
-            Log.d(TAG, "联系人");
         } else {
             //用于首次使用该应用，如果开启拦截且没有设置拦截模式，则会挂断所有电话
             doReceivePhone(context, intent);

@@ -23,7 +23,7 @@
         android:textSize="18sp"
         android:gravity="center"
         android:layout_height="wrap_content"
-        android:text="这里定义的短信内容会在当你在拦截记录点击发送短信时自动填充"
+        android:text="这里定义的短信内容会当你在拦截记录点击发送短信时自动填充"
         />
 
 </LinearLayout>

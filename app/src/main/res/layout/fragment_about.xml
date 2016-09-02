@@ -28,14 +28,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:singleLine="false"
-                android:text="  1.安卓6.0版本的如果出现无法运行的情况，可能是没有赋予相关权限请到设置->应用管理->电话拦截灵->权限 赋予该应用相对应的权限（不同厂商的手机可能存在差异）"
+                android:text="  1.安卓6.0版本的如果某个操作出现闪退的情况，可能是没有赋予相关权限请到设置->应用管理->电话拦截灵->权限 赋予该应用相对应的权限（不同厂商的手机可能存在差异）"
                 android:textSize="@dimen/text_padding" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="false"
-                android:text="  2.由于使用的是系统控件，安卓系统版本号不同对应的界面可能会有有所差异(不会影响使用)"
+                android:text="  2.安卓系统版本号不同对应的界面可能会有有所差异(不会影响使用)"
                 android:textSize="@dimen/text_padding" />
 
             <TextView
