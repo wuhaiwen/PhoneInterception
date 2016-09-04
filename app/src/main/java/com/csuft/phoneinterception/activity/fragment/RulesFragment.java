@@ -348,22 +348,22 @@ public class RulesFragment extends Fragment implements Formatter {
 
     public void init() {
         hour_from.setFormatter(this);
-        hour_from.setMaxValue(24);
+        hour_from.setMaxValue(23);
         hour_from.setMinValue(0);
         hour_from.setValue(10);
 
         minute_from.setFormatter(this);
-        minute_from.setMaxValue(60);
+        minute_from.setMaxValue(59);
         minute_from.setMinValue(0);
         minute_from.setValue(0);
 
         hour_to.setFormatter(this);
-        hour_to.setMaxValue(24);
+        hour_to.setMaxValue(23);
         hour_to.setMinValue(0);
         hour_to.setValue(10);
 
         minute_to.setFormatter(this);
-        minute_to.setMaxValue(60);
+        minute_to.setMaxValue(59);
         minute_to.setMinValue(0);
         minute_to.setValue(0);
     }

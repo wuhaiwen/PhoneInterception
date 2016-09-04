@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
+import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -67,18 +68,29 @@ public class PhoneReceiver extends BroadcastReceiver {
         if (action.equals(ACTION)) {
             //先判断拦截是否已经打开
             if (is_open) {
+                Log.i(TAG, "开启");
                 //判断免打扰是否开启
                 if (is_open_no_disturb) {
+                    Log.d("zuoyexifengdiaobishu", String.valueOf(judgeInDuration(context)));
                     //判断当前时间是否处于免打扰时间段
                     if (judgeInDuration(context)) {
                         //如果处于该时间段，则调用挂断
-                        doJudge(context, intent, phoneNumber);
-                    }else {
+                        try {
+                            doJudge(context, intent, phoneNumber);
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         return;
                     }
                 } else {
                     //如果没有打开，则按照定义拦截的拦截模式进行拦截
-                    doJudge(context, intent, phoneNumber);
+                    try {
+                        doJudge(context, intent, phoneNumber);
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
         }
@@ -118,6 +130,7 @@ public class PhoneReceiver extends BroadcastReceiver {
                     Date date = new Date(time);
                     SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("MM月dd号 HH:mm");
                     String dateString = simpleDateFormat1.format(date);
+                    iTelephony.endCall();//自动挂断电话
 //                    Log.d(TAG, phoneNumber + dateString);
                     data_contacts = new ArrayList<>();
                     //标志该号码是否来自联系人
@@ -133,22 +146,23 @@ public class PhoneReceiver extends BroadcastReceiver {
                             break;
                         }
                     }
-                    if(!is_from_contacts)
-                        phoneNumber = phoneNumber+"(未知)";
+                    if (!is_from_contacts)
+                        phoneNumber = phoneNumber + "(未知)";
 //                    iTelephony.answerRingingCall();//自动接通电话
                     guishudi = guishudi == null ? "未知归属地" : guishudi;
 //                    Toast.makeText(context, guishudi, Toast.LENGTH_SHORT).show();
                     String sql = "insert into record (number,retreat,date) values " +
                             "(" + "'" + phoneNumber + "'," + "'" + guishudi + "'," + "'" + dateString + "'" + ");";
                     db.execSQL(sql);
-                    iTelephony.endCall();//自动挂断电话
                     //插入成功则发送广播更新界面
                     Intent intent1 = new Intent(Config.UPDATE);
                     context.sendBroadcast(intent1);
                     //发送拦截消息到通知栏
                     SendNotification(context, phoneNumber, guishudi);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
                 } catch (Exception e) {
-                    Log.e(TAG, "[Broadcast]Exception=" + e.getMessage(), e);
+                    e.printStackTrace();
                 }
                 break;
             case TelephonyManager.CALL_STATE_IDLE:
@@ -185,13 +199,22 @@ public class PhoneReceiver extends BroadcastReceiver {
     public void getGuiShudi(Context context, String phoneNumber) {
         dbManager = new DbManager(context);
         city_db = dbManager.getDatabase1();
-        String sql2 = "select area_name from phone_view where phone_number=" + phoneNumber.substring(0, 7);
-        Cursor cursor_city = OperateDbHelper.getData(city_db, sql2);
-        while (cursor_city.moveToNext()) {
-            guishudi = cursor_city.getString(0);
+        try {
+            Log.d("hah", phoneNumber);
+            String str = phoneNumber.substring(0, 7);
+            String sql2 = "select area_name from phone_view where phone_number=" + str;
+            Log.d("hah", phoneNumber.substring(0, 7));
+            Cursor cursor_city = OperateDbHelper.getData(city_db, sql2);
+            while (cursor_city.moveToNext()) {
+                guishudi = cursor_city.getString(0);
+            }
+            Log.d("hah", guishudi);
+            cursor_city.close();
+            city_db.close();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
-        cursor_city.close();
-        city_db.close();
+
     }
 
     public boolean judgeInDuration(Context context) {
@@ -200,20 +223,11 @@ public class PhoneReceiver extends BroadcastReceiver {
         String duration_info_str = duration_info.getString(Config.DISTURB_INFO, "");
         int length = duration_info_str.length();
         if (length > 0) {
-            String str1 = duration_info_str.substring(0, duration_info_str.indexOf("-"));
-            String str2 = duration_info_str.substring(duration_info_str.indexOf("-") + 2, length);
-            String[] dds1 = new String[]{};
-            String[] dds2 = new String[]{};
-
-            // 分取系统时间 小时分
-            dds1 = str1.split(":");
-            dds2 = str2.split(":");
-            int start_hour = Integer.parseInt(dds1[0]);
-            int start_minute = Integer.parseInt(dds1[1]);
-            int end_hour = Integer.parseInt(dds2[0]);
-            int end_minute = Integer.parseInt(dds2[1]);
-            Log.d(TAG, start_hour + " " + start_minute + " " + end_hour + " " + end_minute);
-            in_duration = JudgeCurrentTime.isDuration(start_hour, start_minute, end_hour, end_minute);
+            try {
+                in_duration = JudgeCurrentTime.isDuration(duration_info_str);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
 
@@ -258,7 +272,6 @@ public class PhoneReceiver extends BroadcastReceiver {
                 }
                 String key3 = key.replace(" ", "").substring(0, 3);
                 String num3 = phoneNumber.substring(0, 3);
-                Log.d(TAG, num3 + " " + key + " " + key);
                 if (phoneNumber.equals(key)) {
                     //首先匹配号码
                     is_from_black = true;
@@ -282,7 +295,7 @@ public class PhoneReceiver extends BroadcastReceiver {
             }
             cursor.close();
         } else if (reject_all) {
-            Log.d(TAG, "全部");
+            Log.i(TAG, "全部1");
             doReceivePhone(context, intent);
         } else if (let_contacts) {
             //是否放行联系人模式
@@ -299,10 +312,12 @@ public class PhoneReceiver extends BroadcastReceiver {
                     break;
                 }
             }
+
             //如果不是来自联系人，则挂断
             if (!is_contacts)
                 doReceivePhone(context, intent);
         } else {
+            Log.i(TAG, "全部");
             //用于首次使用该应用，如果开启拦截且没有设置拦截模式，则会挂断所有电话
             doReceivePhone(context, intent);
         }

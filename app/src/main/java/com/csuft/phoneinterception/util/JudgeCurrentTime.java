@@ -8,45 +8,67 @@ import java.util.Date;
  */
 public class JudgeCurrentTime {
 
-    public static boolean isDuration(int start_hour, int start_minute, int end_hour, int end_minute) {
+    public static boolean isDuration(String duration_info_str) throws Exception {
         boolean is_in_duration = false;
-        SimpleDateFormat formatters = new SimpleDateFormat("HH:mm");
-        Date curDates = new Date(System.currentTimeMillis());// 获取当前时间
-        String strs = formatters.format(curDates);
-//        //开始时间
-//        int start_hour = hour_from.getValue();
-//        int start_minute = minute_from.getValue();
-        //分钟数
-        int start_total_minute = start_hour * 60 + start_minute;
-        //结束时间
-//        int end_hour = hour_to.getValue();
-//        int end_minute = minute_to.getValue();
-        //结束的分钟数
-        int end_total_minute = end_hour * 60 + end_minute;
-
-        String[] dds = new String[]{};
+        int length = duration_info_str.length();
+        String str1 = duration_info_str.substring(0, duration_info_str.indexOf("-"));
+        String str2 = duration_info_str.substring(duration_info_str.indexOf("-") + 2, length);
+        System.out.println(str1 + " " + str2);
+        String[] dds1 = new String[] {};
+        String[] dds2 = new String[] {};
 
         // 分取系统时间 小时分
-        dds = strs.split(":");
-        int current_hour = Integer.parseInt(dds[0]);
-        int current_minute = Integer.parseInt(dds[1]);
-        //当前分钟数
-        int current_total_minute = current_hour * 60 + current_minute;
-//        Log.d("hahahahah",String.valueOf(start_total_minute)+" "+String.valueOf(end_total_minute)+" "+String.valueOf(current_total_minute));
+        dds1 = str1.split(":");
+        dds2 = str2.split(":");
 
+        int start_hour = Integer.parseInt(dds1[0]);
+        int start_minute = Integer.parseInt(dds1[1]);
+        int end_hour = Integer.parseInt(dds2[0]);
+        int end_minute = Integer.parseInt(dds2[1]);
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy/MM/dd");
+        String current_str = simpleDateFormat1.format(new Date(System.currentTimeMillis()));
+        String next_day = simpleDateFormat1.format(new Date(System.currentTimeMillis()+60*60*24*1000));
+        System.out.println(current_str+" "+next_day);
+
+        long start = simpleDateFormat.parse(current_str+" "+ str1).getTime();
+        long end = simpleDateFormat.parse(current_str+" "+ str2).getTime();
+        long current = System.currentTimeMillis();
+        System.out.println(start+" "+end+" "+current);
+        long end2 = simpleDateFormat.parse(next_day+" " + str2).getTime();
+        System.err.println(end+" "+end2);
         if (start_hour < end_hour) {
-            //当前是同一天
-            if (start_total_minute <= current_total_minute && current_total_minute <= end_total_minute) {
+            // 当前是同一天
+            if(start<=current&&current<=end){
                 is_in_duration = true;
-            } else {
+            }else {
+                is_in_duration=  false;
+            }
+        } else if(start_hour>end_hour){
+            //当前不是同一天
+            if(start<=current&&current<=end2){
+                is_in_duration = true;
+            }else {
                 is_in_duration = false;
             }
-        } else if (start_hour >= end_hour) {
-            //当前是从第一点到第二天
-            if (start_total_minute <= current_total_minute && current_total_minute <= end_total_minute + 24 * 60) {
+        }else {
+            //当前不是同一天且小时相等，	如果开始的分钟数大于结束的分钟数
+            if(start_minute>end_minute){
+                if(start<=current&&current<=end2){
+                    is_in_duration = true;
+                }else {
+                    is_in_duration = false;
+                }
+            }else if (start_minute<end_minute) {
+                if(start<=current&&current<=end){
+                    is_in_duration = true;
+                }else {
+                    is_in_duration=  false;
+                }
+            }else {
+                //如果两个时间都相等，就是一整天都在时间段内
                 is_in_duration = true;
-            } else {
-                is_in_duration = false;
             }
         }
         return is_in_duration;

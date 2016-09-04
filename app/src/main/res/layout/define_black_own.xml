@@ -29,6 +29,6 @@
         android:layout_width="match_parent"
         android:layout_marginTop="20dp"
         android:layout_height="wrap_content"
-        android:text="2.输入以某个字段开头的号码(如虚拟电信号段170)"
+        android:text="2.输入以某个字段开头的号码(如170)"
          />
 </LinearLayout>

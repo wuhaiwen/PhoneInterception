@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:singleLine="false"
-                android:text="  1.安卓6.0版本的如果某个操作出现闪退的情况，可能是没有赋予相关权限请到设置->应用管理->电话拦截灵->权限 赋予该应用相对应的权限（不同厂商的手机可能存在差异）"
+                android:text="  1.安卓6.0版本的如果有某个操作出现闪退的情况，可能是没有赋予相关权限请到设置->应用管理->电话拦截灵->权限 赋予该应用相对应的权限（不同厂商的手机可能存在差异）"
                 android:textSize="@dimen/text_padding" />
 
             <TextView
@@ -80,20 +80,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:singleLine="false"
-                android:text="  本人在校学生，安卓新手，该应用源码感兴趣的可以到github上下载："
+                android:text="  本人在校学生，安卓新手，做的不好的地方还请见谅："
                 android:textSize="@dimen/text_padding" />
+
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:text="https://github.com/wuhaiwen/PhoneInterception"
-                android:textSize="@dimen/text_padding" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="   邮箱："
+                android:text="   个人邮箱："
                 android:textSize="@dimen/text_padding" />
 
             <TextView
